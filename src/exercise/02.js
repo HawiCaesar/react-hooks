@@ -3,14 +3,14 @@
 
 import * as React from 'react'
 
-function useLocalStorage(key, defaultValue){
+function useLocalStorage(key, defaultValue, {serialze = JSON.stringify, deserialize = JSON.parse} = {}){
 
   const [state, setState] = React.useState(() => {
     const valueInlocalStorage = window.localStorage.getItem(key)
 
     if (valueInlocalStorage) {
       try {
-        return JSON.parse(valueInlocalStorage)
+        return deserialize(valueInlocalStorage)
       } catch (error) {
         window.localStorage.removeItem(key)
       }
@@ -20,8 +20,8 @@ function useLocalStorage(key, defaultValue){
   })
 
   React.useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(state))
-  }, [key, state])
+    window.localStorage.setItem(key, serialze(state))
+  }, [key, state, serialze])
 
 
   return [state, setState]
