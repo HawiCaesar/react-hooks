@@ -11,7 +11,7 @@ function useLocalStorage(initialName){
 
   // 🐨 Here's where you'll use `React.useEffect`.
   // The callback should set the `name` in localStorage.
-  // 💰 window.localStorage.setItem('name', name).....
+  // 💰 window.localStorage.setItem('name', name)
 
   React.useEffect(() => {
     window.localStorage.setItem('name', name)
