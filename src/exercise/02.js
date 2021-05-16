@@ -5,10 +5,22 @@ import * as React from 'react'
 
 function useLocalStorage(key, defaultValue){
 
-  const [state, setState] = React.useState(() => window.localStorage.getItem(key) || defaultValue)
+  const [state, setState] = React.useState(() => {
+    const valueInlocalStorage = window.localStorage.getItem(key)
+
+    if (valueInlocalStorage) {
+      try {
+        return JSON.parse(valueInlocalStorage)
+      } catch (error) {
+        window.localStorage.removeItem(key)
+      }
+    }
+    
+    return typeof defaultValue === 'function' ? defaultValue() : defaultValue
+  })
 
   React.useEffect(() => {
-    window.localStorage.setItem(key, state)
+    window.localStorage.setItem(key, JSON.stringify(state))
   }, [key, state])
 
 
