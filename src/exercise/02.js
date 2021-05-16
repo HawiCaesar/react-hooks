@@ -19,7 +19,16 @@ function useLocalStorage(key, defaultValue, {serialze = JSON.stringify, deserial
     return typeof defaultValue === 'function' ? defaultValue() : defaultValue
   })
 
+  //we want to be able to change the key without re-rendering the component
+  const prevKeyRef = React.useRef(key) 
+
   React.useEffect(() => {
+    const prevKey = prevKeyRef.current
+    if (prevKey !== key) {
+      window.localStorage.removeItem(prevKey)
+    }
+
+    prevKeyRef.current = key
     window.localStorage.setItem(key, serialze(state))
   }, [key, state, serialze])
 
